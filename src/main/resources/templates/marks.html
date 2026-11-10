@@ -1,0 +1,338 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marks Management</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f3f5f9;
+            color: #192957;
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 230px;
+            min-width: 230px;
+            background: #192957;
+            color: white;
+            padding: 25px 20px;
+        }
+
+        .sidebar h2 {
+            margin-bottom: 40px;
+        }
+
+        .sidebar a {
+            display: block;
+            color: white;
+            text-decoration: none;
+            margin-bottom: 28px;
+            font-size: 17px;
+        }
+
+        .main-content {
+            flex: 1;
+            min-width: 0;
+            padding: 35px;
+        }
+
+        h1 {
+            font-size: 34px;
+        }
+
+        .subtitle {
+            color: #687b99;
+            font-size: 18px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 14px;
+            box-shadow: 0 4px 15px rgba(0,0,0,.07);
+            margin-bottom: 30px;
+        }
+
+        .card h2 {
+            margin-top: 0;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 18px;
+        }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 7px;
+            font-size: 16px;
+        }
+
+        button {
+            background: #2861eb;
+            color: white;
+            border: none;
+            padding: 13px 22px;
+            border-radius: 7px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #194cc4;
+        }
+
+        .save-button {
+            margin-top: 20px;
+        }
+
+        .success {
+            color: green;
+            margin-bottom: 20px;
+        }
+
+        .error {
+            color: #dc3545;
+            margin-bottom: 20px;
+        }
+
+        .table-container {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            min-width: 650px;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: #192957;
+            color: white;
+            padding: 16px;
+            text-align: left;
+        }
+
+        td {
+            padding: 16px;
+            border-bottom: 1px solid #eee;
+        }
+
+        tbody tr:nth-child(even) {
+            background: #f0f5ff;
+        }
+
+        .percentage {
+            color: #176b3a;
+            font-weight: bold;
+        }
+
+        @media(max-width: 768px) {
+            .sidebar {
+                width: 145px;
+                min-width: 145px;
+                padding: 15px;
+            }
+
+            .main-content {
+                padding: 20px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+
+        <h2>Student Portal</h2>
+
+        <a th:href="@{/}">Dashboard</a>
+        <a th:href="@{/add-student}">Add Student</a>
+        <a th:href="@{/view-students}">View Students</a>
+        <a th:href="@{/attendance}">Attendance</a>
+        <a th:href="@{/attendance-history}">Attendance History</a>
+        <a th:href="@{/attendance-summary}">Attendance Summary</a>
+        <a th:href="@{/marks}">Marks</a>
+
+        <form th:action="@{/logout}" method="post">
+            <button type="submit">Logout</button>
+        </form>
+
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+
+        <h1>Marks Management</h1>
+
+        <p class="subtitle">
+            Add and manage student academic marks.
+        </p>
+
+        <p class="success" th:if="${param.success}">
+            Marks saved successfully!
+        </p>
+
+        <p class="error"
+           th:if="${error}"
+           th:text="${error}">
+        </p>
+
+        <!-- Add Marks Form -->
+        <div class="card">
+
+            <h2>Enter Student Marks</h2>
+
+            <form th:action="@{/save-marks}" method="post">
+
+                <div class="form-grid">
+
+                    <div class="field">
+                        <label>Student</label>
+
+                        <select name="rollNumber" required>
+                            <option value="">Select Student</option>
+
+                            <option th:each="student : ${students}"
+                                    th:value="${student.rollNumber}"
+                                    th:text="${student.rollNumber + ' - ' + student.name}">
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="field">
+                        <label>Subject</label>
+
+                        <input type="text"
+                               name="subject"
+                               placeholder="Enter subject name"
+                               maxlength="100"
+                               required>
+                    </div>
+
+                    <div class="field">
+                        <label>Marks Obtained</label>
+
+                        <input type="number"
+                               name="marksObtained"
+                               placeholder="Enter obtained marks"
+                               min="0"
+                               step="0.01"
+                               required>
+                    </div>
+
+                    <div class="field">
+                        <label>Maximum Marks</label>
+
+                        <input type="number"
+                               name="maxMarks"
+                               placeholder="Enter maximum marks"
+                               min="0.01"
+                               step="0.01"
+                               required>
+                    </div>
+
+                </div>
+
+                <button class="save-button" type="submit">
+                    Save Marks
+                </button>
+
+            </form>
+
+        </div>
+
+        <!-- Results Table -->
+        <div class="card">
+
+            <h2>Student Results</h2>
+
+            <div class="table-container">
+
+                <table>
+
+                    <thead>
+                    <tr>
+                        <th>Roll Number</th>
+                        <th>Subject</th>
+                        <th>Marks Obtained</th>
+                        <th>Maximum Marks</th>
+                        <th>Percentage</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+
+                    <tr th:each="mark : ${marksList}">
+
+                        <td th:text="${mark.rollNumber}"></td>
+
+                        <td th:text="${mark.subject}"></td>
+
+                        <td th:text="${mark.marksObtained}"></td>
+
+                        <td th:text="${mark.maxMarks}"></td>
+
+                        <td class="percentage"
+                            th:text="${#numbers.formatDecimal(mark.percentage, 1, 2) + '%'}">
+                        </td>
+
+                    </tr>
+
+                    <tr th:if="${#lists.isEmpty(marksList)}">
+                        <td colspan="5" style="text-align:center;">
+                            No marks entered yet.
+                        </td>
+                    </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </main>
+
+</div>
+
+</body>
+</html>

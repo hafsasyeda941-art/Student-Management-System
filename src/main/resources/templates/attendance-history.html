@@ -1,0 +1,188 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendance History</title>
+
+    <style>
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f3f5f9;
+            color: #192957;
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 230px;
+            min-width: 230px;
+            background: #192957;
+            color: white;
+            padding: 25px 20px;
+        }
+
+        .sidebar h2 { margin-bottom: 45px; }
+
+        .sidebar a {
+            display: block;
+            color: white;
+            text-decoration: none;
+            margin-bottom: 30px;
+            font-size: 17px;
+        }
+
+        .main-content {
+            flex: 1;
+            min-width: 0;
+            padding: 40px;
+        }
+
+        h1 { font-size: 34px; }
+
+        .subtitle {
+            color: #687b99;
+            font-size: 18px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 14px;
+            box-shadow: 0 4px 15px rgba(0,0,0,.07);
+        }
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            min-width: 650px;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: #192957;
+            color: white;
+            text-align: left;
+            padding: 17px;
+        }
+
+        td {
+            padding: 17px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .present { color: green; font-weight: bold; }
+        .absent { color: #dc3545; font-weight: bold; }
+
+        .error { color: red; }
+
+        .empty {
+            text-align: center;
+            padding: 25px;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #2861eb;
+            text-decoration: none;
+        }
+
+        @media(max-width: 768px) {
+            .sidebar {
+                width: 145px;
+                min-width: 145px;
+                padding: 15px;
+            }
+
+            .main-content { padding: 20px; }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <aside class="sidebar">
+        <h2>Student Portal</h2>
+
+        <a th:href="@{/}">Dashboard</a>
+        <a th:href="@{/add-student}">Add Student</a>
+        <a th:href="@{/view-students}">View Students</a>
+        <a th:href="@{/attendance}">Attendance</a>
+        <a th:href="@{/attendance-history}">Attendance History</a>
+        <a th:href="@{/marks}">Marks</a>
+
+        <form th:action="@{/logout}" method="post">
+            <button type="submit">Logout</button>
+        </form>
+    </aside>
+
+    <main class="main-content">
+
+        <h1>Attendance History</h1>
+
+        <p class="subtitle">
+            View all recorded student attendance.
+        </p>
+
+        <a class="back-link" th:href="@{/attendance}">
+            ← Back to Mark Attendance
+        </a>
+
+        <p class="error" th:if="${error}" th:text="${error}"></p>
+
+        <div class="card">
+            <div class="table-container">
+
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Roll Number</th>
+                        <th>Student Name</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    <tr th:each="record : ${records}">
+                        <td th:text="${record.rollNumber}"></td>
+                        <td th:text="${record.studentName}"></td>
+                        <td th:text="${record.attendanceDate}"></td>
+
+                        <td>
+                            <span th:text="${record.status}"
+                                  th:class="${record.status == 'Present' ? 'present' : 'absent'}">
+                            </span>
+                        </td>
+                    </tr>
+
+                    <tr th:if="${#lists.isEmpty(records)}">
+                        <td colspan="4" class="empty">
+                            No attendance records found.
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+
+    </main>
+</div>
+
+</body>
+</html>

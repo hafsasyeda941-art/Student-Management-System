@@ -1,0 +1,76 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" th:href="@{/style.css}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Management System</title>
+</head>
+<body>
+
+<!-- Sidebar -->
+
+<aside class="sidebar">
+    <h2>Student Portal</h2>
+
+    <nav>
+        <ul>
+            <li><a th:href="@{/}">Dashboard</a></li>
+            <li><a th:href="@{/add-student}">Add Student</a></li>
+            <li><a th:href="@{/view-students}">View Students</a></li>
+            <li><a th:href="@{/attendance}">Attendance</a></li>
+            <li><a th:href="@{/marks}">Marks</a></li>
+            <li><a th:href="@{/settings}">Settings</a></li>
+        </ul>
+    </nav>
+
+    <form th:action="@{/logout}" method="post">
+        <button type="submit">Logout</button>
+    </form>
+</aside>
+
+<form th:action="@{/logout}" method="post">
+    <button type="submit">Logout</button>
+</form>
+
+<!-- Main Content -->
+<main>
+
+    <header>
+        <h1>Dashboard</h1>
+        <p>Welcome to the Student Management System!</p>
+    </header>
+
+    <!-- Dashboard Cards -->
+
+    <!-- Dashboard Cards -->
+    <section class="dashboard-cards">
+
+        <div class="card">
+            <h3>Total Students</h3>
+            <h2 th:text="${totalStudents}">0</h2>
+        </div>
+
+        <div class="card">
+            <h3>Departments</h3>
+            <h2 th:text="${totalDepartments}">0</h2>
+        </div>
+
+        <div class="card">
+            <h3>Attendance</h3>
+            <h2 th:text="${#numbers.formatDecimal(attendancePercentage, 1, 2) + '%'}">0%</h2>
+        </div>
+
+        <div class="card">
+            <h3>Pending Tasks</h3>
+            <h2>Not configured</h2>
+        </div>
+
+    </section>
+
+
+</main>
+
+</body>
+</html>

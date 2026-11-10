@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Student</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
+</head>
+
+<body>
+
+<aside>
+    <h2>Student Portal</h2>
+
+    <nav>
+        <ul>
+            <li><a href="index.html">Dashboard</a></li>
+            <li><a href="add-student.html">Add Student</a></li>
+            <li><a href="#">View Students</a></li>
+            <li><a href="#">Attendance</a></li>
+            <li><a href="#">Marks</a></li>
+            <li><a href="#">Settings</a></li>
+        </ul>
+    </nav>
+</aside>
+
+<main>
+    <header>
+        <h1>Add New Student</h1>
+        <p>Register a new student in the system.</p>
+    </header>
+
+    <div class="form-container">
+        <p th:if="${message}" th:text="${message}"
+           style="color: green;"></p>
+
+        <p th:if="${error}" th:text="${error}"
+           style="color: red;"></p>
+
+        <form action="/students" method="post">
+            <label>Roll Number</label>
+            <input type="text" name="rollNumber"
+                   placeholder="Enter roll number" required>
+
+            <label>Student Name</label>
+            <input type="text" name="name"
+                   placeholder="Enter student name" required>
+
+            <label>Email</label>
+            <input type="email" name="email"
+                   placeholder="Enter email address" required>
+
+            <label>Department</label>
+            <select name="department" required>
+                <option value="">Select Department</option>
+                <option value="CSE">CSE</option>
+                <option value="ECE">ECE</option>
+                <option value="EEE">EEE</option>
+                <option value="IT">IT</option>
+                <option value="Mechanical">Mechanical</option>
+            </select>
+
+            <label>Year</label>
+            <select name="year" required>
+                <option value="">Select Year</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+            </select>
+
+            <button type="submit">Register Student</button>
+        </form>
+
+    </div>
+</main>
+
+</body>
+</html>

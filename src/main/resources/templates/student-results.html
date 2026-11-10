@@ -1,0 +1,182 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Results</title>
+
+    <style>
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f3f5f9;
+            color: #192957;
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 230px;
+            min-width: 230px;
+            background: #192957;
+            color: white;
+            padding: 25px 20px;
+        }
+
+        .sidebar h2 { margin-bottom: 40px; }
+
+        .sidebar a {
+            display: block;
+            color: white;
+            text-decoration: none;
+            margin-bottom: 27px;
+        }
+
+        .main-content {
+            flex: 1;
+            min-width: 0;
+            padding: 35px;
+        }
+
+        .subtitle {
+            color: #687b99;
+            font-size: 18px;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 14px;
+            box-shadow: 0 4px 15px rgba(0,0,0,.07);
+            margin-top: 25px;
+        }
+
+        .table-container { overflow-x: auto; }
+
+        table {
+            width: 100%;
+            min-width: 750px;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: #192957;
+            color: white;
+            padding: 17px;
+            text-align: left;
+        }
+
+        td {
+            padding: 17px;
+            border-bottom: 1px solid #eee;
+        }
+
+        tbody tr:nth-child(even) {
+            background: #f0f5ff;
+        }
+
+        .gpa {
+            color: #176b3a;
+            font-weight: bold;
+        }
+
+        .error { color: #dc3545; }
+
+        @media(max-width: 768px) {
+            .sidebar {
+                width: 145px;
+                min-width: 145px;
+                padding: 15px;
+            }
+
+            .main-content { padding: 20px; }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <aside class="sidebar">
+        <h2>Student Portal</h2>
+
+        <a th:href="@{/}">Dashboard</a>
+        <a th:href="@{/add-student}">Add Student</a>
+        <a th:href="@{/view-students}">View Students</a>
+        <a th:href="@{/attendance}">Attendance</a>
+        <a th:href="@{/attendance-history}">Attendance History</a>
+        <a th:href="@{/attendance-summary}">Attendance Summary</a>
+        <a th:href="@{/marks}">Marks Management</a>
+        <a th:href="@{/student-results}">Student Results</a>
+
+        <form th:action="@{/logout}" method="post">
+            <button type="submit">Logout</button>
+        </form>
+    </aside>
+
+    <main class="main-content">
+
+        <h1>Student Results</h1>
+
+        <p class="subtitle">
+            Overall marks, percentage and GPA on a 10-point scale.
+        </p>
+
+        <p class="error"
+           th:if="${error}"
+           th:text="${error}">
+        </p>
+
+        <div class="card">
+
+            <div class="table-container">
+
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Roll Number</th>
+                        <th>Student Name</th>
+                        <th>Total Obtained</th>
+                        <th>Maximum Marks</th>
+                        <th>Percentage</th>
+                        <th>GPA / 10</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+
+                    <tr th:each="result : ${results}">
+                        <td th:text="${result.rollNumber}"></td>
+                        <td th:text="${result.studentName}"></td>
+                        <td th:text="${#numbers.formatDecimal(result.totalObtained, 1, 2)}"></td>
+                        <td th:text="${#numbers.formatDecimal(result.totalMaximum, 1, 2)}"></td>
+
+                        <td th:text="${#numbers.formatDecimal(result.percentage, 1, 2) + '%'}"></td>
+
+                        <td class="gpa"
+                            th:text="${#numbers.formatDecimal(result.gpa, 1, 2)}">
+                        </td>
+                    </tr>
+
+                    <tr th:if="${#lists.isEmpty(results)}">
+                        <td colspan="6">No students found.</td>
+                    </tr>
+
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+
+    </main>
+</div>
+
+</body>
+</html>

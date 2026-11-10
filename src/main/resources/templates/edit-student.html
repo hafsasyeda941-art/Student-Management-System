@@ -1,0 +1,86 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Edit Student</title>
+
+    <link rel="stylesheet" th:href="@{/style.css}">
+</head>
+
+<body>
+
+<aside>
+    <h2>Student Portal</h2>
+
+    <nav>
+        <ul>
+            <li><a href="/">Dashboard</a></li>
+            <li><a href="/add-student">Add Student</a></li>
+            <li><a href="/view-students">View Students</a></li>
+            <li><a href="#">Attendance</a></li>
+            <li><a href="#">Marks</a></li>
+            <li><a href="#">Settings</a></li>
+        </ul>
+    </nav>
+</aside>
+
+<main>
+
+    <header>
+        <h1>Edit Student</h1>
+        <p>Update the student's information.</p>
+    </header>
+
+    <div class="form-container">
+
+        <form action="/update-student" method="post">
+
+            <label>Roll Number</label>
+            <input type="text"
+                   name="rollNumber"
+                   th:value="${student.rollNumber}"
+                   readonly>
+
+            <label>Student Name</label>
+            <input type="text"
+                   name="name"
+                   th:value="${student.name}"
+                   required>
+
+            <label>Email</label>
+            <input type="email"
+                   name="email"
+                   th:value="${student.email}"
+                   required>
+
+            <label>Department</label>
+            <select name="department" required>
+                <option value="CSE" th:selected="${student.department == 'CSE'}">CSE</option>
+                <option value="ECE" th:selected="${student.department == 'ECE'}">ECE</option>
+                <option value="EEE" th:selected="${student.department == 'EEE'}">EEE</option>
+                <option value="IT" th:selected="${student.department == 'IT'}">IT</option>
+                <option value="Mechanical" th:selected="${student.department == 'Mechanical'}">Mechanical</option>
+            </select>
+
+            <label>Year</label>
+            <select name="year" required>
+                <option value="1" th:selected="${student.year == 1}">1</option>
+                <option value="2" th:selected="${student.year == 2}">2</option>
+                <option value="3" th:selected="${student.year == 3}">3</option>
+                <option value="4" th:selected="${student.year == 4}">4</option>
+            </select>
+
+            <button type="submit">Update Student</button>
+
+        </form>
+
+    </div>
+
+</main>
+
+</body>
+</html>
